@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerçek Zamanlı Bildirim Sistemi</title>
+
+    <!-- SignalR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+    <h2>Gerçek Zamanlı Bildirim Sistemi</h2>
+
+    <!-- Bildirim Mesajı Gönderme -->
+    <button onclick="showSendNotification()">Bildirim Gönder</button>
+
+    <!-- Bildirim Listesi -->
+    <ul id="notificationList"></ul>
+
+    <script>
+        const token = localStorage.getItem("jwtToken");
+
+        // Eğer token yoksa, kullanıcıyı giriş sayfasına yönlendir
+        if (!token) {
+            Swal.fire("Uyarı!", "Lütfen giriş yapın.", "warning")
+                .then(() => window.location.href = "index.html"); // Giriş sayfasına yönlendirme
+        }
+
+        // SignalR Hub bağlantısını oluştur
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub", {
+                accessTokenFactory: () => token
+            })
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        // Bağlantıyı başlat
+        connection.start().then(() => {
+            console.log("Bağlantı başarılı.");
+        }).catch(err => console.error("Bağlantı hatası:", err));
+
+        // Sunucudan gelen bildirimleri dinle
+        connection.on("ReceiveNotification", function (message) {
+            // Bildirimleri SweetAlert ile göster
+            Swal.fire({
+                title: "Yeni Bildirim!",
+                text: message,
+                icon: "info",
+                confirmButtonText: "Tamam"
+            });
+
+            // Bildirimi listeye ekle
+            const li = document.createElement("li");
+            li.textContent = message;
+            document.getElementById("notificationList").appendChild(li);
+        });
+
+        // Bildirim gönderme fonksiyonu
+        function showSendNotification() {
+            Swal.fire({
+                title: "Bildirim Gönder",
+                input: "text",  // Kullanıcıdan metin al
+                inputPlaceholder: "Bildirim mesajınızı yazın...",
+                showCancelButton: true,
+                confirmButtonText: "Gönder",
+                cancelButtonText: "İptal"
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    // Girilen mesajı API'ye gönder
+                    sendNotification(result.value);
+                }
+            });
+        }
+
+        // Bildirim gönderme işlemi
+        function sendNotification(message) {
+            fetch('/api/notifications', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ message: message })
+            }).then(() => {
+                Swal.fire("Başarılı!", "Bildirim gönderildi.", "success");
+            }).catch(() => {
+                Swal.fire("Hata!", "Bildirim gönderilemedi.", "error");
+            });
+        }
+    </script>
+
+</body>
+</html>

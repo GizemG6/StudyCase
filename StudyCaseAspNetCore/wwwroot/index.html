@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Girişi</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <h2>Giriş Yap</h2>
+    <input type="email" id="email" placeholder="E-posta" required>
+    <input type="password" id="password" placeholder="Şifre" required>
+    <button onclick="login()">Giriş Yap</button>
+
+    <script>
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            fetch('/api/auth/login', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem("jwtToken", data.token);
+                        Swal.fire("Başarılı!", "Giriş başarılı!", "success")
+                            .then(() => window.location.href = "notifications.html");
+                    } else {
+                        Swal.fire("Hata!", "Geçersiz giriş!", "error");
+                    }
+                })
+                .catch(() => Swal.fire("Hata!", "Bağlantı hatası!", "error"));
+        }
+    </script>
+
+</body>
+</html>
