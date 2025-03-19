@@ -42,6 +42,8 @@ namespace StudyCaseAspNetCore
 			// Add SignalR service for real-time communication
 			builder.Services.AddSignalR();
 
+			builder.Services.AddSwaggerGen();
+
 			builder.Services.AddControllers();
 
 			var app = builder.Build();
@@ -55,6 +57,9 @@ namespace StudyCaseAspNetCore
 			app.UseAuthentication();
 
 			app.UseAuthorization();
+
+			app.UseSwagger();
+			app.UseSwaggerUI();
 
 			app.MapControllers();
 

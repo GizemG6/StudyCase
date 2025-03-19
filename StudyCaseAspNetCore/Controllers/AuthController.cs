@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using StudyCaseAspNetCore.Dto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,7 +10,6 @@ namespace StudyCaseAspNetCore.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize]
 	public class AuthController : ControllerBase
 	{
 		private readonly IConfiguration _config;
@@ -23,7 +21,7 @@ namespace StudyCaseAspNetCore.Controllers
 		}
 
 		[HttpPost("login")]
-		public IActionResult Login([FromBody] LoginRequest request)
+		public IActionResult Login([FromBody]LoginRequestDto request)
 		{
 			// Verify user credentials (In a real-world application, you'd query the database)
 			if (request.Email == "admin@example.com" && request.Password == "123456")
@@ -57,7 +55,7 @@ namespace StudyCaseAspNetCore.Controllers
 				_config["Jwt:Issuer"],
 				_config["Jwt:Audience"],
 				claims,
-				expires: DateTime.UtcNow.AddMinutes(10),
+				expires: DateTime.UtcNow.AddHours(1),
 				signingCredentials: credentials
 			);
 

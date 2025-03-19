@@ -91,6 +91,34 @@
                 Swal.fire("Error!", "Notification could not be sent.", "error");
             });
         }
+
+        // Load notifications from the API and display them
+        function loadNotifications() {
+            fetch('/api/notifications', {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Loaded notifications:", data);
+                    const notificationList = document.getElementById("notificationList");
+                    notificationList.innerHTML = ""; // Clear the list before adding new ones
+                    data.forEach(notification => {
+                        const li = document.createElement("li");
+                        li.textContent = notification.message;
+                        notificationList.appendChild(li);
+                    });
+                })
+                .catch(() => {
+                    console.error("Error loading notifications:", error);
+                    Swal.fire("Error!", "Could not load notifications.", "error");
+                });
+        }
+
+        // Load notifications when the page is loaded
+        window.onload = loadNotifications;
     </script>
 
 </body>
