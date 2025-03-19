@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kullanıcı Girişi</title>
+    <title>User Login</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
     <h2>Giriş Yap</h2>
-    <input type="email" id="email" placeholder="E-posta" required>
-    <input type="password" id="password" placeholder="Şifre" required>
-    <button onclick="login()">Giriş Yap</button>
+    <input type="email" id="email" placeholder="E-mail" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
 
     <script>
         function login() {
@@ -27,13 +27,13 @@
                 .then(data => {
                     if (data.token) {
                         localStorage.setItem("jwtToken", data.token);
-                        Swal.fire("Başarılı!", "Giriş başarılı!", "success")
+                        Swal.fire("Successful!", "Login successful!", "success")
                             .then(() => window.location.href = "notifications.html");
                     } else {
-                        Swal.fire("Hata!", "Geçersiz giriş!", "error");
+                        Swal.fire("Error!", "Invalid entry!", "error");
                     }
                 })
-                .catch(() => Swal.fire("Hata!", "Bağlantı hatası!", "error"));
+                .catch(() => Swal.fire("Error!", "Connection error!", "error"));
         }
     </script>
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ namespace StudyCaseAspNetCore.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class AuthController : ControllerBase
 	{
 		private readonly IConfiguration _config;
@@ -22,13 +24,13 @@ namespace StudyCaseAspNetCore.Controllers
 		[HttpPost("login")]
 		public IActionResult Login([FromBody] LoginRequest request)
 		{
-			// Kullanıcıyı doğrula (Gerçek projede veritabanından kontrol et)
+			// Verify user (Check from database in real project)
 			if (request.Email == "admin@example.com" && request.Password == "123456")
 			{
 				var token = GenerateJwtToken(request.Email);
 				return Ok(new { token });
 			}
-			return Unauthorized("Geçersiz e-posta veya şifre!");
+			return Unauthorized("Invalid email or password!");
 		}
 
 		private string GenerateJwtToken(string email)

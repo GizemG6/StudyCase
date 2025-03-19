@@ -45,11 +45,11 @@ namespace StudyCaseAspNetCore
 
 			app.UseHttpsRedirection();
 
-			app.UseRouting();
-
 			app.UseAuthentication();
 
 			app.UseAuthorization();
+
+			app.MapGet("/", () => Results.Redirect("/notifications.html"));
 
 			app.MapControllers();
 

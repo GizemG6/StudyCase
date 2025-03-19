@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerçek Zamanlı Bildirim Sistemi</title>
+    <title>Real Time Notification System</title>
 
-    <!-- SignalR -->
+    <!-- added SignalR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
-    <!-- SweetAlert2 -->
+    <!-- added SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
 
-    <h2>Gerçek Zamanlı Bildirim Sistemi</h2>
+    <h2>Real Time Notification System</h2>
 
-    <!-- Bildirim Mesajı Gönderme -->
-    <button onclick="showSendNotification()">Bildirim Gönder</button>
+    <!-- Send Notification Message -->
+    <button onclick="showSendNotification()">Send Notification</button>
 
-    <!-- Bildirim Listesi -->
+    <!-- Notification List -->
     <ul id="notificationList"></ul>
 
     <script>
         const token = localStorage.getItem("jwtToken");
 
-        // Eğer token yoksa, kullanıcıyı giriş sayfasına yönlendir
+        // If token is not present, redirect user to index page
         if (!token) {
-            Swal.fire("Uyarı!", "Lütfen giriş yapın.", "warning")
-                .then(() => window.location.href = "index.html"); // Giriş sayfasına yönlendirme
+            Swal.fire("Warning!", "Please sign in.", "warning")
+                .then(() => window.location.href = "index.html");
         }
 
-        // SignalR Hub bağlantısını oluştur
+        // Create SignalR Hub connection
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/notificationHub", {
                 accessTokenFactory: () => token
@@ -38,45 +38,45 @@
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
-        // Bağlantıyı başlat
+        // Start the connection
         connection.start().then(() => {
-            console.log("Bağlantı başarılı.");
-        }).catch(err => console.error("Bağlantı hatası:", err));
+            console.log("Connection successful.");
+        }).catch(err => console.error("Connection error:", err));
 
-        // Sunucudan gelen bildirimleri dinle
+        // Listen to notifications from the server
         connection.on("ReceiveNotification", function (message) {
-            // Bildirimleri SweetAlert ile göster
+            // Show notifications with SweetAlert
             Swal.fire({
-                title: "Yeni Bildirim!",
+                title: "New Notification!",
                 text: message,
                 icon: "info",
-                confirmButtonText: "Tamam"
+                confirmButtonText: "Ok"
             });
 
-            // Bildirimi listeye ekle
+            // Add notification to list
             const li = document.createElement("li");
             li.textContent = message;
             document.getElementById("notificationList").appendChild(li);
         });
 
-        // Bildirim gönderme fonksiyonu
+        // Notification sending function
         function showSendNotification() {
             Swal.fire({
-                title: "Bildirim Gönder",
-                input: "text",  // Kullanıcıdan metin al
-                inputPlaceholder: "Bildirim mesajınızı yazın...",
+                title: "Send notification",
+                input: "text",
+                inputPlaceholder: "Write your notification message...",
                 showCancelButton: true,
-                confirmButtonText: "Gönder",
-                cancelButtonText: "İptal"
+                confirmButtonText: "Send",
+                cancelButtonText: "Cancel"
             }).then((result) => {
                 if (result.isConfirmed && result.value) {
-                    // Girilen mesajı API'ye gönder
+                    // Send the entered message to the API
                     sendNotification(result.value);
                 }
             });
         }
 
-        // Bildirim gönderme işlemi
+        // Notification sending process
         function sendNotification(message) {
             fetch('/api/notifications', {
                 method: "POST",
@@ -86,9 +86,9 @@
                 },
                 body: JSON.stringify({ message: message })
             }).then(() => {
-                Swal.fire("Başarılı!", "Bildirim gönderildi.", "success");
+                Swal.fire("Successfully!", "Notification sent.", "success");
             }).catch(() => {
-                Swal.fire("Hata!", "Bildirim gönderilemedi.", "error");
+                Swal.fire("Error!", "Notification could not be sent.", "error");
             });
         }
     </script>
