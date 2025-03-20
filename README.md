@@ -1,8 +1,8 @@
-Real-Time Notification System
+Real-Time Notification System🚀
 -------------------------------
 This is a real-time notification system built using ASP.NET Core, SignalR, and JWT Authentication. The system allows users to receive notifications in real-time, and it also stores notification history in an SQL Server database. The system includes a RESTful API for sending and retrieving notifications.
 
-Features
+⭐Features
 -----------------
 • Real-time notifications: Notifications are pushed to all connected clients in real-time using SignalR.
 
@@ -12,21 +12,21 @@ Features
 
 • Client-side interaction: Users can login, send notifications, and view received notifications in real-time.
 
-Project Structure
+🎯Project Structure
 -----------------
 • SignalR Hub: The NotificationHub handles the real-time communication and sends notifications to connected clients.
 
 • API Endpoints:
 
-----POST /api/auth/login: Authenticates a user and provides a JWT token.
+----📌POST /api/auth/login: Authenticates a user and provides a JWT token.
 
-----POST /api/notifications: Sends a new notification and saves it in the database.
+----📌POST /api/notifications: Sends a new notification and saves it in the database.
 
-----GET /api/notifications: Retrieves the notification history from the database.
+----📌GET /api/notifications: Retrieves the notification history from the database.
 
 • Database: SQL Server database is used to store notifications. The Notification model includes Id, Message, and SentDate.
 
-Setup Instructions
+🖥️Setup Instructions
 -----------------
 Prerequisites
 
@@ -38,37 +38,35 @@ Prerequisites
 
 Steps to Run the Project
 
-1- Clone the repository:
+1️⃣ Clone the repository:
 ```bash
 git clone https://github.com/GizemG6/StudyCase.git
 ```
 
-2- Configure Database:
+2️⃣ Configure Database:
 ```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=NotificationDb;Trusted_Connection=True;"
 }
 ```
 
-• Open the appsettings.json file and update the connection string to your SQL Server instance
+• Open the appsettings.json file and update the connection string to your SQL Server instance.
 
-Example:
-
-3- Run the application:
+3️⃣ Run the application:
 
 •Open the solution in Visual Studio or your preferred IDE.
 
 •Build and run the project.
 
-4- Access the Web Pages:
+4️⃣ Access the Web Pages:
 
 • The first page opened is set to notifications.html but since the user is not logged in, it sends the user to index.hmtl
 
 • Once logged in, you will be redirected to notifications.html where you can see and send real-time notifications.
 
-API Endpoints
+🚩API Endpoints
 -----------------
-Authentication
+🕵🏽Authentication
 
 POST /api/auth/login
 
@@ -89,7 +87,7 @@ Response:
 }
 ```
 
-Notifications
+🔔Notifications
 
 POST /api/notifications
 
@@ -109,7 +107,7 @@ Response:
 }
 ```
 
-Notifications
+🔔Notifications
 
 GET /api/notifications
 
@@ -127,15 +125,15 @@ Response:
 ]
 ```
 
-Client-Side
+💻Client-Side
 -----------------
-Login Page (index.html)
+🔎Login Page (index.html)
 
 • Users can log in by providing their email and password.
 
 • Upon successful login, a JWT token is saved to localStorage and the user is redirected to the notifications page.
 
-Notifications Page (notifications.html)
+🔔Notifications Page (notifications.html)
 
 • Displays a list of real-time notifications.
 
@@ -145,15 +143,15 @@ Notifications Page (notifications.html)
 
 • Notifications are received in real-time via SignalR.
 
-SignalR Connection
+💡SignalR Connection
 -----------------
 The SignalR connection is established using the JWT token for authentication. Once connected, the client can receive notifications in real-time.
 
-Sending Notifications
+🌐Sending Notifications
 -----------------
 Notifications can be sent via the Send Notification button, which opens a SweetAlert prompt for the user to enter a message. The message is then sent to the server, which pushes it to all connected clients.
 
-Technologies Used
+🛠️Technologies Used
 -----------------
 • ASP.NET Core: Framework for building the RESTful API and SignalR Hub.
 
@@ -167,14 +165,19 @@ Technologies Used
 
 • SQL Server: Database for storing notification history.
 
-SQL ScreenShot (some trial notifications)
+📊SQL ScreenShot (some trial notifications)
 -----------------
 ![Ekran görüntüsü 2025-03-20 001025](https://github.com/user-attachments/assets/41141150-23c1-4ac9-a0bb-e9d08445f4b8)
 
-Screenshots of the project in running
+▶️Screenshots of the project in running
 -----------------
 ![Ekran görüntüsü 2025-03-20 001615](https://github.com/user-attachments/assets/33b96988-abde-490d-b991-8ca6eec57ede)
 
 ![Ekran görüntüsü 2025-03-20 001631](https://github.com/user-attachments/assets/c6e0c899-67d7-43e6-b912-651c4d81cd1c)
+
+📍Also, notifications from SQL is visible.
+
+![Ekran görüntüsü 2025-03-20 003626](https://github.com/user-attachments/assets/6f34fbf5-f84a-4185-81ff-27ba3435b986)
+
 
 
